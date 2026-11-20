@@ -1,0 +1,6 @@
+{
+  "name": "NEXUS",
+  "description": "Advanced Business Operations Platform uniting real-time financial analytics, CRM, Kanban project management, notifications, and AI intelligence.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

@@ -1,0 +1,218 @@
+{
+  "entities": {
+    "UserProfile": {
+      "title": "UserProfile",
+      "description": "Private user profile and workspace preferences.",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "displayName": { "type": "string", "minLength": 1, "maxLength": 120 },
+        "email": { "type": "string", "format": "email", "maxLength": 200 },
+        "role": { "type": "string", "enum": ["admin", "manager", "member"] },
+        "theme": { "type": "string", "enum": ["system", "dark", "light"] },
+        "currency": { "type": "string", "enum": ["USD", "EUR", "GBP"] },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["uid", "displayName", "email", "role", "theme", "currency", "createdAt", "updatedAt"]
+    },
+    "AdminMarker": {
+      "title": "AdminMarker",
+      "description": "Trusted marker identifying administrator accounts.",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "grantedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["uid", "grantedAt"]
+    },
+    "Customer": {
+      "title": "Customer",
+      "description": "CRM customer or prospect record.",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string", "minLength": 1, "maxLength": 120 },
+        "company": { "type": "string", "minLength": 1, "maxLength": 120 },
+        "email": { "type": "string", "format": "email", "maxLength": 200 },
+        "phone": { "type": "string", "maxLength": 40 },
+        "segment": { "type": "string", "enum": ["lead", "prospect", "active", "inactive"] },
+        "value": { "type": "number" },
+        "source": { "type": "string", "minLength": 1, "maxLength": 80 },
+        "notes": { "type": "string", "maxLength": 2000 },
+        "ownerId": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["name", "company", "email", "segment", "value", "source", "ownerId", "createdAt", "updatedAt"]
+    },
+    "CustomerInteraction": {
+      "title": "CustomerInteraction",
+      "description": "Contact history entry linked to a customer.",
+      "type": "object",
+      "properties": {
+        "customerId": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "channel": { "type": "string", "enum": ["email", "call", "meeting", "note"] },
+        "summary": { "type": "string", "minLength": 1, "maxLength": 1000 },
+        "date": { "type": "string", "maxLength": 40 },
+        "ownerId": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["customerId", "channel", "summary", "date", "ownerId", "createdAt"]
+    },
+    "Project": {
+      "title": "Project",
+      "description": "Operational project record with budget, deadline, and status.",
+      "type": "object",
+      "properties": {
+        "title": { "type": "string", "minLength": 1, "maxLength": 140 },
+        "clientName": { "type": "string", "minLength": 1, "maxLength": 120 },
+        "status": { "type": "string", "enum": ["planning", "active", "on_hold", "completed"] },
+        "budget": { "type": "number" },
+        "spent": { "type": "number" },
+        "progress": { "type": "number" },
+        "deadline": { "type": "string", "maxLength": 40 },
+        "members": { "type": "array" },
+        "ownerId": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["title", "clientName", "status", "budget", "spent", "progress", "deadline", "members", "ownerId", "createdAt", "updatedAt"]
+    },
+    "Task": {
+      "title": "Task",
+      "description": "Actionable Kanban task belonging to a project.",
+      "type": "object",
+      "properties": {
+        "projectId": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "title": { "type": "string", "minLength": 1, "maxLength": 160 },
+        "assignee": { "type": "string", "minLength": 1, "maxLength": 80 },
+        "priority": { "type": "string", "enum": ["low", "medium", "high", "critical"] },
+        "stage": { "type": "string", "enum": ["backlog", "in_progress", "review", "done"] },
+        "dueDate": { "type": "string", "maxLength": 40 },
+        "completed": { "type": "boolean" },
+        "ownerId": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["projectId", "title", "assignee", "priority", "stage", "dueDate", "completed", "ownerId", "createdAt", "updatedAt"]
+    },
+    "ProjectComment": {
+      "title": "ProjectComment",
+      "description": "Discussion comment on a project.",
+      "type": "object",
+      "properties": {
+        "projectId": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "authorName": { "type": "string", "minLength": 1, "maxLength": 80 },
+        "body": { "type": "string", "minLength": 1, "maxLength": 1500 },
+        "ownerId": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["projectId", "authorName", "body", "ownerId", "createdAt"]
+    },
+    "Transaction": {
+      "title": "Transaction",
+      "description": "Financial income or expense record.",
+      "type": "object",
+      "properties": {
+        "type": { "type": "string", "enum": ["income", "expense"] },
+        "amount": { "type": "number" },
+        "category": { "type": "string", "minLength": 1, "maxLength": 80 },
+        "description": { "type": "string", "minLength": 1, "maxLength": 240 },
+        "date": { "type": "string", "maxLength": 40 },
+        "projectId": { "type": "string", "maxLength": 128 },
+        "receiptUrl": { "type": "string", "maxLength": 500 },
+        "ownerId": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["type", "amount", "category", "description", "date", "ownerId", "createdAt", "updatedAt"]
+    },
+    "Budget": {
+      "title": "Budget",
+      "description": "Monthly spending cap for a financial category.",
+      "type": "object",
+      "properties": {
+        "category": { "type": "string", "minLength": 1, "maxLength": 80 },
+        "monthlyLimit": { "type": "number" },
+        "ownerId": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["category", "monthlyLimit", "ownerId", "createdAt", "updatedAt"]
+    },
+    "Notification": {
+      "title": "Notification",
+      "description": "User notification record.",
+      "type": "object",
+      "properties": {
+        "title": { "type": "string", "minLength": 1, "maxLength": 120 },
+        "message": { "type": "string", "minLength": 1, "maxLength": 400 },
+        "category": { "type": "string", "enum": ["task", "deadline", "finance", "system"] },
+        "read": { "type": "boolean" },
+        "ownerId": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["title", "message", "category", "read", "ownerId", "createdAt"]
+    },
+    "ActivityLog": {
+      "title": "ActivityLog",
+      "description": "Immutable workspace audit trail entry.",
+      "type": "object",
+      "properties": {
+        "actor": { "type": "string", "minLength": 1, "maxLength": 120 },
+        "action": { "type": "string", "minLength": 1, "maxLength": 80 },
+        "entityType": { "type": "string", "minLength": 1, "maxLength": 60 },
+        "summary": { "type": "string", "minLength": 1, "maxLength": 300 },
+        "ownerId": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["actor", "action", "entityType", "summary", "ownerId", "createdAt"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": { "$ref": "#/entities/UserProfile" },
+      "description": "Private user profile and preferences isolated per UID."
+    },
+    "/admins/{userId}": {
+      "schema": { "$ref": "#/entities/AdminMarker" },
+      "description": "Trusted admin role markers."
+    },
+    "/customers/{customerId}": {
+      "schema": { "$ref": "#/entities/Customer" },
+      "description": "CRM customer records scoped to ownerId."
+    },
+    "/customers/{customerId}/interactions/{interactionId}": {
+      "schema": { "$ref": "#/entities/CustomerInteraction" },
+      "description": "Contact history entries governed by parent customer ownership."
+    },
+    "/projects/{projectId}": {
+      "schema": { "$ref": "#/entities/Project" },
+      "description": "Projects scoped to ownerId."
+    },
+    "/projects/{projectId}/tasks/{taskId}": {
+      "schema": { "$ref": "#/entities/Task" },
+      "description": "Project tasks governed by parent project ownership."
+    },
+    "/projects/{projectId}/comments/{commentId}": {
+      "schema": { "$ref": "#/entities/ProjectComment" },
+      "description": "Project discussion comments governed by parent project ownership."
+    },
+    "/transactions/{transactionId}": {
+      "schema": { "$ref": "#/entities/Transaction" },
+      "description": "Financial income and expense ledger scoped to ownerId."
+    },
+    "/budgets/{budgetId}": {
+      "schema": { "$ref": "#/entities/Budget" },
+      "description": "Category monthly budget definitions scoped to ownerId."
+    },
+    "/notifications/{notificationId}": {
+      "schema": { "$ref": "#/entities/Notification" },
+      "description": "In-app notifications scoped to ownerId."
+    },
+    "/activity_logs/{logId}": {
+      "schema": { "$ref": "#/entities/ActivityLog" },
+      "description": "Append-only operational activity logs scoped to ownerId."
+    }
+  }
+}
